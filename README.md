@@ -1,5 +1,7 @@
 # Highlighted code editor built for svelte projects (BETA)
 
+Do not use this component util I figure out how to export it properly. As it stands now you need to use Tailwind, tell Tailwind to pick up this component in node_modules as well as include custom CSS classes in you're `tailwind.config.cjs`.
+
 ## Built with
 
 - Svelte(Kit)
@@ -12,7 +14,7 @@
 
 ## Install with
 
-`npm i svelte-highlighted-code-editor`
+`npm i -D svelte-highlighted-code-editor`
 
 ## NPM repository
 
