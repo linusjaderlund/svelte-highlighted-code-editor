@@ -8,7 +8,7 @@
   export let language: PrismLanguage = PrismLanguage.JS;
 </script>
 
-<div class={`bg-code-editor h-60 flex p-3`}>
+<div class={`bg-code-editor h-full flex p-3`}>
   <CodeEditorLineNumbers bind:value />
   <div class="relative top-0 left-0 w-code-editor">
     <CodeEditorTextArea bind:value />
