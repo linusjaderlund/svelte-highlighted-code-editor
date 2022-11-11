@@ -1,5 +1,6 @@
 import { getPrismConfig, tab, tabSize } from "./CodeEditor.config";
 import type { CodeEditorState, PrismConfig } from "./CodeEditor.models";
+import { textAreaScrollState } from "./CodeEditor.store";
 
 export const setCursorPosition = (textArea: HTMLTextAreaElement, cursorPosition: number) => {
   textArea.selectionStart = cursorPosition;
@@ -91,4 +92,32 @@ export const loadPrism = async (config: PrismConfig): Promise<any> => {
   }
 
   return window.Prism;
+};
+
+export const handleScrollEvent = (event: Event) => {
+  const textAreaElement: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
+  textAreaScrollState.set({ top: textAreaElement.scrollTop, left: textAreaElement.scrollLeft });
+};
+
+export const bindCaretMovementEvent = (node: HTMLElement, callback: (event: Event) => void) => {
+  const events = [
+    "keydown",
+    "mousedown",
+    "touchstart",
+    "input",
+    "paste",
+    "cut",
+    "select",
+    "selectstart",
+    "focus",
+    "blur",
+  ];
+
+  events.forEach((event) => node.addEventListener(event, callback));
+
+  return {
+    destroy() {
+      events.forEach((event) => node.removeEventListener(event, callback));
+    },
+  };
 };

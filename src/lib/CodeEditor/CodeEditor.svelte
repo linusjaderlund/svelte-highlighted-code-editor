@@ -5,10 +5,10 @@
   import CodeEditorTextArea from "./CodeEditorTextArea.svelte";
 
   export let value: string;
-  export let language: PrismLanguage = PrismLanguage.MD;
+  export let language: PrismLanguage = PrismLanguage.JS;
 </script>
 
-<div class={`p-3 m-3 bg-code-editor rounded-lg h-60 flex`}>
+<div class={`bg-code-editor h-60 flex p-3`}>
   <CodeEditorLineNumbers bind:value />
   <div class="relative top-0 left-0 w-code-editor">
     <CodeEditorTextArea bind:value />

@@ -1,32 +1,28 @@
 /** @type {import('tailwindcss').Config} */
+
+const codeEditorFontSize = "1rem";
+const codeEditorLineHeight = "1.25rem";
+const lineNumbersWidth = "4rem";
+const lineNumbersFontSize = codeEditorFontSize;
+
 module.exports = {
   content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     extend: {
       width: {
-        "code-editor": "calc(100% - 3.75rem)",
-        "13": "3.25rem",
-      },
-      height: {
-        "code-editor": "calc(100% - 1.5rem)",
-        "line-numbers": "calc(100% + 0.2rem)",
-      },
-      minWidth: {
-        11: "2.75rem",
+        "code-editor": `calc(100% - ${lineNumbersWidth})`,
+        "line-numbers": lineNumbersWidth,
       },
       backgroundColor: {
         "code-editor": "#f5f2f0",
-        "line-numbers": "rgba(0, 0, 0, 0.06)",
       },
       textColor: {
-        "line-numbers": "rgba(0, 0, 0, 0.4)",
-      },
-      spacing: {
-        "01": "0.1rem",
+        "line-numbers": "rgba(0, 0, 0, 0.2)",
+        "line-numbers-active": "rgba(0, 0, 0, 0.7)",
       },
       fontSize: {
-        "code-editor": ["1rem", "1.25rem"],
-        "line-numbers": ["0.75rem", "1.25rem"],
+        "code-editor": [codeEditorFontSize, codeEditorLineHeight],
+        "line-numbers": [lineNumbersFontSize, codeEditorLineHeight],
       },
       fontFamily: {
         "code-editor": [
