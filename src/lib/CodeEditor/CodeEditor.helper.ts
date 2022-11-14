@@ -7,7 +7,7 @@ export const setCursorPosition = (textArea: HTMLTextAreaElement, cursorPosition:
   textArea.selectionEnd = cursorPosition;
 };
 
-const splitCodeAtCursor = (
+const splitCodeAtCaret = (
   textArea: HTMLTextAreaElement
 ): { codeBeforeTab: string; codeAfterTab: string; cursorPosition: number } => {
   const code = textArea.value;
@@ -19,7 +19,7 @@ const splitCodeAtCursor = (
 };
 
 export const addTab = (textArea: HTMLTextAreaElement): CodeEditorState => {
-  const { codeBeforeTab, codeAfterTab, cursorPosition } = splitCodeAtCursor(textArea);
+  const { codeBeforeTab, codeAfterTab, cursorPosition } = splitCodeAtCaret(textArea);
   const modifiedCursorPosition = cursorPosition + tab.length;
 
   return {
@@ -49,12 +49,39 @@ const countSpacesAfterCursorPosition = (codeBeforeTab: string): number => {
 };
 
 export const removeTab = (textArea: HTMLTextAreaElement): CodeEditorState => {
-  const { codeBeforeTab, codeAfterTab, cursorPosition } = splitCodeAtCursor(textArea);
+  const { codeBeforeTab, codeAfterTab, cursorPosition } = splitCodeAtCaret(textArea);
   const spacesAfterCursorPosition = countSpacesAfterCursorPosition(codeBeforeTab);
-  console.log("spacesAfterCursorPosition", spacesAfterCursorPosition);
 
   const modifiedCursorPosition = cursorPosition - spacesAfterCursorPosition;
   const editedCode = `${codeBeforeTab.substring(0, codeBeforeTab.length - spacesAfterCursorPosition)}${codeAfterTab}`;
+
+  return {
+    editedCode,
+    cursorPosition: modifiedCursorPosition,
+  };
+};
+
+const countLeadingSpaces = (str: string): number => {
+  let spaces = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) !== " ") {
+      break;
+    }
+
+    spaces++;
+  }
+
+  return spaces;
+};
+
+export const addCurrentTabDepthAfterNewLine = (textArea: HTMLTextAreaElement): CodeEditorState => {
+  const { codeBeforeTab, codeAfterTab, cursorPosition } = splitCodeAtCaret(textArea);
+  const codeLinesBeforeCaret = codeBeforeTab.split(/\n/);
+  const lastLineBeforeCaret = codeLinesBeforeCaret[codeLinesBeforeCaret.length - 1];
+  const leadingSpaces = countLeadingSpaces(lastLineBeforeCaret);
+  const modifiedCursorPosition = cursorPosition + leadingSpaces + 1;
+  const editedCode = `${codeBeforeTab}\n${" ".repeat(leadingSpaces)}${codeAfterTab}`;
 
   return {
     editedCode,

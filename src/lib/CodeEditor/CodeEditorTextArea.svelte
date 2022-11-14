@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { addTab, bindCaretMovementEvent, handleScrollEvent, removeTab, setCursorPosition } from "./CodeEditor.helper";
+  import {
+    addCurrentTabDepthAfterNewLine,
+    addTab,
+    bindCaretMovementEvent,
+    handleScrollEvent,
+    removeTab,
+    setCursorPosition,
+  } from "./CodeEditor.helper";
   import { latestCaretMovement } from "./CodeEditor.store";
 
   export let value: string;
@@ -21,10 +28,23 @@
     setCursorPosition(textAreaElement, cursorPosition);
   };
 
+  const handleEnterKeyEvent = (event: KeyboardEvent) => {
+    event.preventDefault();
+
+    const textAreaElement: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
+    const { editedCode, cursorPosition } = addCurrentTabDepthAfterNewLine(textAreaElement);
+
+    updateTextAreaAndState(textAreaElement, editedCode);
+    setCursorPosition(textAreaElement, cursorPosition);
+  };
+
   const handleKeyDownEvent = (event: KeyboardEvent) => {
     switch (event.key) {
       case "Tab":
         handleTabKeyEvent(event);
+        break;
+      case "Enter":
+        handleEnterKeyEvent(event);
         break;
     }
   };
