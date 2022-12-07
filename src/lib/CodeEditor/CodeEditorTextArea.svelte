@@ -8,6 +8,8 @@
     setCursorPosition,
   } from "./CodeEditor.helper";
   import { latestCaretMovement } from "./CodeEditor.store";
+  import { formatWithCursor } from "prettier";
+  import parserBabel from "prettier/parser-babel";
 
   export let value: string;
   const fireCaretMovementEventTime = 50;
@@ -38,7 +40,30 @@
     setCursorPosition(textAreaElement, cursorPosition);
   };
 
+  const handleSpecialCommandEvent = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "s":
+        event.preventDefault();
+        const textAreaElement = event.target as HTMLTextAreaElement;
+        const formattedCode = formatWithCursor(textAreaElement.value, {
+          cursorOffset: textAreaElement.selectionStart,
+          parser: "babel",
+          plugins: [parserBabel],
+        });
+
+        updateTextAreaAndState(textAreaElement, formattedCode.formatted);
+        setCursorPosition(textAreaElement, formattedCode.cursorOffset);
+
+        break;
+    }
+  };
+
   const handleKeyDownEvent = (event: KeyboardEvent) => {
+    if (event.ctrlKey || event.metaKey) {
+      handleSpecialCommandEvent(event);
+      return;
+    }
+
     switch (event.key) {
       case "Tab":
         handleTabKeyEvent(event);
